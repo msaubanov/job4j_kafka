@@ -1,0 +1,18 @@
+services:
+  zookeeper:
+    extends:
+      service: zookeeper
+      file: docker-compose-zookeeper.yml
+  kafka-broker-1:
+    extends:
+      service: kafka-broker-1
+      file: docker-compose-kafka-cluster.yml
+    depends_on:
+      - zookeeper
+  init_kafka:
+    extends:
+      service: init-kafka
+      file: docker-compose-kafka.yml
+networks:
+  application_network:
+    driver: bridge
