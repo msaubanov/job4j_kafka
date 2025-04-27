@@ -1,0 +1,33 @@
+buildscript {
+    ext {
+        lombokVersion = '1.18.30'
+    }
+}
+
+plugins {
+    id 'java'
+    id 'application'
+    id 'checkstyle'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+    implementation("ch.qos.logback:logback-classic:0.9.26")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    implementation("org.apache.kafka:kafka-clients:3.6.0")
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+
+}
+
+test {
+    useJUnitPlatform()
+}
