@@ -30,7 +30,7 @@ public class KafkaJob4jConsumer {
                 consumer.poll(Duration.ofMillis(1000)).forEach(rec -> log.info("Received message: key="+rec.key()+", value="+rec.value()+", partition="+rec.partition()+", offset="+rec.offset()));
             }
         }catch (final Exception ex) {
-            log.info("Consumer error :{}",ex.getMessage());
+            log.error("Consumer error :{}",ex.getMessage());
         }
     }
 }

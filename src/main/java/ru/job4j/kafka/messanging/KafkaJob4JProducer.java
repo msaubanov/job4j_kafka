@@ -28,8 +28,8 @@ public class KafkaJob4JProducer {
                 log.info("Send " + msg);
                 Thread.sleep(1000);
             }
-        } catch (final InterruptedException e) {
-            e.printStackTrace();
+        } catch (final InterruptedException ex) {
+            log.error("Error in producer : {}", ex.getMessage());
         }
     }
 }
