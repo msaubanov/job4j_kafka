@@ -23,7 +23,7 @@ public class KafkaJob4jConsumer {
         consumer = new KafkaConsumer<>(properties);
     }
 
-    public void initConsume(String topic) {
+    public void initConsume(final String topic) {
         consumer.subscribe(List.of(topic));
         try(consumer) {
             while (true) {

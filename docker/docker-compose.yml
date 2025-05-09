@@ -9,6 +9,18 @@ services:
       file: docker-compose-kafka-cluster.yml
     depends_on:
       - zookeeper
+  kafka-broker-2:
+    extends:
+      service: kafka-broker-2
+      file: docker-compose-kafka-cluster.yml
+    depends_on:
+      - zookeeper
+  kafka-broker-3:
+    extends:
+      service: kafka-broker-3
+      file: docker-compose-kafka-cluster.yml
+    depends_on:
+      - zookeeper
   init_kafka:
     extends:
       service: init-kafka
