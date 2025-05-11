@@ -22,7 +22,7 @@ class ReqReplyTest {
 //    send(correlationId = 1), receive(correlationId = 1)
 //    send(correlationId = 1), таймаут
 //    send(correlationId = 1), receive(correlationId = 2), таймаут
-    final long timeout = 20;
+    final long timeout = 200;
     final ReqReply reply = new ReqReply(timeout);
     @Test
     @DisplayName("Test without timeout")
@@ -56,6 +56,15 @@ class ReqReplyTest {
     @Test
     @DisplayName("With receiving wrong")
     void whenReceiveAnotherVal() {
+        final long delay = 2000;
+        final String correlationId = "1";
 
+        final CompletableFuture<String> task = CompletableFuture.supplyAsync(()-> reply.send(correlationId));
+        CompletableFuture.runAsync(
+                () -> reply.receive("2"),
+                CompletableFuture.delayedExecutor(delay, TimeUnit.MILLISECONDS)
+        );
+        final String expected = "Happened timeout : "+timeout;
+        Assertions.assertEquals(expected,task.join());
     }
 }
