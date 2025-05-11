@@ -31,6 +31,7 @@ public class ReqReply {
                     return message;
                 }
             }
+            requestToCorrelationIdMap.remove(correlationId);
             return (received) ? message : "Happened timeout : "+timeout;
         }
     }
