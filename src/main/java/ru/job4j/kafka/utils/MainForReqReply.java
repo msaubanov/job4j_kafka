@@ -16,9 +16,9 @@ public class MainForReqReply {
         final ReqReply reply = new ReqReply(20);
         final String correlationId = UUID.randomUUID().toString();
 
-        final CompletableFuture<String> task = CompletableFuture.supplyAsync(()-> reply.send(correlationId));
+        final CompletableFuture<String> task = CompletableFuture.supplyAsync(()-> service.send(correlationId,reply));
         CompletableFuture.runAsync(
-                () -> reply.receive(correlationId),
+                () -> service.receive(correlationId),
                 CompletableFuture.delayedExecutor(1, TimeUnit.MILLISECONDS)
         );
 
