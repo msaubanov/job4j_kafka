@@ -31,10 +31,11 @@ class ReqReplyTest {
     @Test
     @DisplayName("With timeout")
     void sendWithTimeout() {
-        final long delay = 2000;
+        final long delay = 24000;
+        final long timeout = 20000;
         final String correlationId = UUID.randomUUID().toString();
         final ReqReplyService service = new ReqReplyService(new ConcurrentHashMap<>());
-        final ReqReply reqReply = new ReqReply(20);
+        final ReqReply reqReply = new ReqReply(timeout);
         final CompletableFuture<String> task = CompletableFuture.supplyAsync(()-> service.send(correlationId,reqReply));
         CompletableFuture.runAsync(
                 () -> service.receive(correlationId),
