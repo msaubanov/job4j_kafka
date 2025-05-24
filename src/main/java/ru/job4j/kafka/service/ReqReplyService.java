@@ -24,6 +24,7 @@ public class ReqReplyService {
     }
 
     public void receive (final String correlationId) {
+        log.info("RECEIVE IN SERVICE : {}", correlationId);
         final Pair<String,ReqReply> pair = callbackStorage.get(correlationId);
         final ReqReply protoCommand = pair.getSecond();
         protoCommand.receive(pair.getFirst());

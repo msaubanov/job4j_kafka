@@ -17,7 +17,7 @@ class ReqReplyTest {
     void sendEverythingNormal() {
         final String correlationId = UUID.randomUUID().toString();
         final ReqReplyService service = new ReqReplyService(new ConcurrentHashMap<>());
-        final ReqReply reqReply = new ReqReply(20);
+        final ReqReply reqReply = new ReqReply(2000);
         final CompletableFuture<String> task = CompletableFuture.supplyAsync(()-> service.send(correlationId,reqReply));
         CompletableFuture.runAsync(
                 () -> service.receive(correlationId),
