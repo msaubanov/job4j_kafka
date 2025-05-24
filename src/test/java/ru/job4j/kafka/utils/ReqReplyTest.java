@@ -12,8 +12,6 @@ import java.util.concurrent.TimeUnit;
 
 class ReqReplyTest {
 
-    final long timeout = 20;
-
     @Test
     @DisplayName("Test without timeout")
     void sendEverythingNormal() {

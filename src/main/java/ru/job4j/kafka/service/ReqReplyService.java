@@ -18,15 +18,15 @@ public class ReqReplyService {
 
     public String send(final String correlationId, final ReqReply reqReply) {
         final String response ;
-        callbackStorage.put(correlationId,new Pair<>(correlationId,reqReply) );
+        callbackStorage.put(correlationId, new Pair<>(correlationId,reqReply) );
         response = reqReply.send(correlationId);
         return response;
     }
 
     public void receive (final String correlationId) {
         final Pair<String,ReqReply> pair = callbackStorage.get(correlationId);
-        final ReqReply collBack = pair.getSecond();
-        collBack.receive(pair.getFirst());
+        final ReqReply protoCommand = pair.getSecond();
+        protoCommand.receive(pair.getFirst());
         callbackStorage.remove(correlationId);
     }
 }
