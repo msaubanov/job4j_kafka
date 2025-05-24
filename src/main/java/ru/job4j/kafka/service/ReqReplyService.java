@@ -12,20 +12,20 @@ public class ReqReplyService {
 
     private final Map<String, Pair<String,ReqReply> > callbackStorage;
 
-    public ReqReplyService(Map<String, Pair<String,ReqReply>> callbackStorage) {
+    public ReqReplyService(final Map<String, Pair<String,ReqReply>> callbackStorage) {
         this.callbackStorage = callbackStorage;
     }
 
     public String send(final String correlationId, final ReqReply reqReply) {
-        String response ;
+        final String response ;
         callbackStorage.put(correlationId,new Pair<>(correlationId,reqReply) );
         response = reqReply.send(correlationId);
         return response;
     }
 
     public void receive (final String correlationId) {
-        Pair<String,ReqReply> pair = callbackStorage.get(correlationId);
-        ReqReply collBack = pair.getSecond();
+        final Pair<String,ReqReply> pair = callbackStorage.get(correlationId);
+        final ReqReply collBack = pair.getSecond();
         collBack.receive(pair.getFirst());
         callbackStorage.remove(correlationId);
     }

@@ -31,7 +31,7 @@ class ReqReplyTest {
     void sendEverythingNormal() {
         final String correlationId = UUID.randomUUID().toString();
         final ReqReplyService service = new ReqReplyService(new ConcurrentHashMap<>());
-        ReqReply reqReply = new ReqReply(20);
+        final ReqReply reqReply = new ReqReply(20);
         final CompletableFuture<String> task = CompletableFuture.supplyAsync(()-> service.send(correlationId,reqReply));
         CompletableFuture.runAsync(
                 () -> service.receive(correlationId),
@@ -46,7 +46,7 @@ class ReqReplyTest {
         final long delay = 2000;
         final String correlationId = UUID.randomUUID().toString();
         final ReqReplyService service = new ReqReplyService(new ConcurrentHashMap<>());
-        ReqReply reqReply = new ReqReply(20);
+        final ReqReply reqReply = new ReqReply(20);
         final CompletableFuture<String> task = CompletableFuture.supplyAsync(()-> service.send(correlationId,reqReply));
         CompletableFuture.runAsync(
                 () -> service.receive(correlationId),
@@ -61,7 +61,7 @@ class ReqReplyTest {
     void whenReceiveAnotherVal() {
         final String correlationId = "1";
         final ReqReplyService service = new ReqReplyService(new ConcurrentHashMap<>());
-        ReqReply reqReply = new ReqReply(20000);
+        final ReqReply reqReply = new ReqReply(20000);
         final CompletableFuture<String> task = CompletableFuture.supplyAsync(()-> service.send(correlationId,reqReply));
         CompletableFuture.runAsync(
                 () -> service.receive("2"),
