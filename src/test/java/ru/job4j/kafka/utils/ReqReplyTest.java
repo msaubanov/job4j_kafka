@@ -12,18 +12,6 @@ import java.util.concurrent.TimeUnit;
 
 class ReqReplyTest {
 
-    //Доработайте код, приведённый выше, так, чтобы он работал с ключом correlationId:
-
-//1 val correlationId = UUID.randomUUID().toString()
-//2 val reply = ReqReply(10)
-//3 val task = FutureTask({
-//            reply.send(correlationId)
-//    })
-//    Добавьте тесты (три сценария):
-
-//    send(correlationId = 1), receive(correlationId = 1)
-//    send(correlationId = 1), таймаут
-//    send(correlationId = 1), receive(correlationId = 2), таймаут
     final long timeout = 20;
 
     @Test
