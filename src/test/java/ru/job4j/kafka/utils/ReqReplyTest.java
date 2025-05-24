@@ -3,9 +3,11 @@ package ru.job4j.kafka.utils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import ru.job4j.kafka.service.ReqReplyService;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 class ReqReplyTest {
@@ -22,20 +24,20 @@ class ReqReplyTest {
 //    send(correlationId = 1), receive(correlationId = 1)
 //    send(correlationId = 1), таймаут
 //    send(correlationId = 1), receive(correlationId = 2), таймаут
-    final long timeout = 200;
-    final ReqReply reply = new ReqReply(timeout);
+    final long timeout = 20;
+
     @Test
     @DisplayName("Test without timeout")
     void sendEverythingNormal() {
-
         final String correlationId = UUID.randomUUID().toString();
-
-        final CompletableFuture<String> task = CompletableFuture.supplyAsync(()-> reply.send(correlationId));
+        final ReqReplyService service = new ReqReplyService(new ConcurrentHashMap<>());
+        ReqReply reqReply = new ReqReply(20);
+        final CompletableFuture<String> task = CompletableFuture.supplyAsync(()-> service.send(correlationId,reqReply));
         CompletableFuture.runAsync(
-                () -> reply.receive(correlationId),
+                () -> service.receive(correlationId),
                 CompletableFuture.delayedExecutor(1, TimeUnit.MILLISECONDS)
         );
-        Assertions.assertEquals(correlationId,task.join());
+        Assertions.assertEquals(correlationId, task.join());
     }
 
     @Test
@@ -43,10 +45,11 @@ class ReqReplyTest {
     void sendWithTimeout() {
         final long delay = 2000;
         final String correlationId = UUID.randomUUID().toString();
-
-        final CompletableFuture<String> task = CompletableFuture.supplyAsync(()-> reply.send(correlationId));
+        final ReqReplyService service = new ReqReplyService(new ConcurrentHashMap<>());
+        ReqReply reqReply = new ReqReply(20);
+        final CompletableFuture<String> task = CompletableFuture.supplyAsync(()-> service.send(correlationId,reqReply));
         CompletableFuture.runAsync(
-                () -> reply.receive(correlationId),
+                () -> service.receive(correlationId),
                 CompletableFuture.delayedExecutor(delay, TimeUnit.MILLISECONDS)
         );
         final String expected = "Happened timeout : "+timeout;
@@ -56,15 +59,15 @@ class ReqReplyTest {
     @Test
     @DisplayName("With receiving wrong")
     void whenReceiveAnotherVal() {
-        final long delay = 2000;
         final String correlationId = "1";
-
-        final CompletableFuture<String> task = CompletableFuture.supplyAsync(()-> reply.send(correlationId));
+        final ReqReplyService service = new ReqReplyService(new ConcurrentHashMap<>());
+        ReqReply reqReply = new ReqReply(20000);
+        final CompletableFuture<String> task = CompletableFuture.supplyAsync(()-> service.send(correlationId,reqReply));
         CompletableFuture.runAsync(
-                () -> reply.receive("2"),
-                CompletableFuture.delayedExecutor(delay, TimeUnit.MILLISECONDS)
+                () -> service.receive("2"),
+                CompletableFuture.delayedExecutor(1000, TimeUnit.MILLISECONDS)
         );
-        final String expected = "Happened timeout : "+timeout;
+        final String expected = "Happened timeout : "+20000;
         Assertions.assertEquals(expected,task.join());
     }
 }
