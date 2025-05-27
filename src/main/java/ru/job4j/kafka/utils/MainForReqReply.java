@@ -12,11 +12,10 @@ import java.util.concurrent.TimeUnit;
 public class MainForReqReply {
 
     public static void main(final String[] args) {
-        final ReqReplyService service=  new ReqReplyService(new ConcurrentHashMap<>());
-        final ReqReply reply = new ReqReply(20);
+        final ReqReplyService service =  new ReqReplyService(new ConcurrentHashMap<>());
         final String correlationId = UUID.randomUUID().toString();
 
-        final CompletableFuture<String> task = CompletableFuture.supplyAsync(()-> service.send(correlationId,reply));
+        final CompletableFuture<String> task = CompletableFuture.supplyAsync(()-> service.send(correlationId));
         CompletableFuture.runAsync(
                 () -> service.receive(correlationId),
                 CompletableFuture.delayedExecutor(1, TimeUnit.MILLISECONDS)

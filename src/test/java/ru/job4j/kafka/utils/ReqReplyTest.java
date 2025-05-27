@@ -17,8 +17,7 @@ class ReqReplyTest {
     void sendEverythingNormal() {
         final String correlationId = UUID.randomUUID().toString();
         final ReqReplyService service = new ReqReplyService(new ConcurrentHashMap<>());
-        final ReqReply reqReply = new ReqReply(2000);
-        final CompletableFuture<String> task = CompletableFuture.supplyAsync(()-> service.send(correlationId,reqReply));
+        final CompletableFuture<String> task = CompletableFuture.supplyAsync(()-> service.send(correlationId));
         CompletableFuture.runAsync(
                 () -> service.receive(correlationId),
                 CompletableFuture.delayedExecutor(1, TimeUnit.MILLISECONDS)
@@ -29,12 +28,11 @@ class ReqReplyTest {
     @Test
     @DisplayName("With timeout")
     void sendWithTimeout() {
-        final long delay = 24000;
-        final long timeout = 20000;
+        final long delay = 2400;
+        final long timeout = 2000;
         final String correlationId = UUID.randomUUID().toString();
         final ReqReplyService service = new ReqReplyService(new ConcurrentHashMap<>());
-        final ReqReply reqReply = new ReqReply(timeout);
-        final CompletableFuture<String> task = CompletableFuture.supplyAsync(()-> service.send(correlationId,reqReply));
+        final CompletableFuture<String> task = CompletableFuture.supplyAsync(()-> service.send(correlationId));
         CompletableFuture.runAsync(
                 () -> service.receive(correlationId),
                 CompletableFuture.delayedExecutor(delay, TimeUnit.MILLISECONDS)
@@ -48,13 +46,12 @@ class ReqReplyTest {
     void whenReceiveAnotherVal() {
         final String correlationId = "1";
         final ReqReplyService service = new ReqReplyService(new ConcurrentHashMap<>());
-        final ReqReply reqReply = new ReqReply(20000);
-        final CompletableFuture<String> task = CompletableFuture.supplyAsync(()-> service.send(correlationId,reqReply));
+        final CompletableFuture<String> task = CompletableFuture.supplyAsync(()-> service.send(correlationId));
         CompletableFuture.runAsync(
                 () -> service.receive("2"),
                 CompletableFuture.delayedExecutor(1000, TimeUnit.MILLISECONDS)
         );
-        final String expected = "Happened timeout : "+20000;
+        final String expected = "Happened timeout : "+2000;
         Assertions.assertEquals(expected,task.join());
     }
 }
