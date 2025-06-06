@@ -7,7 +7,6 @@ import ru.job4j.kafka.service.ReqReplyService;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 class ReqReplyTest {
@@ -16,8 +15,8 @@ class ReqReplyTest {
     @DisplayName("Test without timeout")
     void sendEverythingNormal() {
         final String correlationId = UUID.randomUUID().toString();
-        final ReqReplyService service = new ReqReplyService(new ConcurrentHashMap<>());
-        final CompletableFuture<String> task = CompletableFuture.supplyAsync(()-> service.send(correlationId));
+        final ReqReplyService service = new ReqReplyService(2000);
+        final CompletableFuture<String> task = CompletableFuture.supplyAsync(()-> service.send(correlationId, correlationId));
         CompletableFuture.runAsync(
                 () -> service.receive(correlationId),
                 CompletableFuture.delayedExecutor(1, TimeUnit.MILLISECONDS)
@@ -31,8 +30,8 @@ class ReqReplyTest {
         final long delay = 2400;
         final long timeout = 2000;
         final String correlationId = UUID.randomUUID().toString();
-        final ReqReplyService service = new ReqReplyService(new ConcurrentHashMap<>());
-        final CompletableFuture<String> task = CompletableFuture.supplyAsync(()-> service.send(correlationId));
+        final ReqReplyService service = new ReqReplyService(timeout);
+        final CompletableFuture<String> task = CompletableFuture.supplyAsync(()-> service.send(correlationId, correlationId));
         CompletableFuture.runAsync(
                 () -> service.receive(correlationId),
                 CompletableFuture.delayedExecutor(delay, TimeUnit.MILLISECONDS)
@@ -45,8 +44,8 @@ class ReqReplyTest {
     @DisplayName("With receiving wrong")
     void whenReceiveAnotherVal() {
         final String correlationId = "1";
-        final ReqReplyService service = new ReqReplyService(new ConcurrentHashMap<>());
-        final CompletableFuture<String> task = CompletableFuture.supplyAsync(()-> service.send(correlationId));
+        final ReqReplyService service = new ReqReplyService(2000);
+        final CompletableFuture<String> task = CompletableFuture.supplyAsync(()-> service.send(correlationId, correlationId));
         CompletableFuture.runAsync(
                 () -> service.receive("2"),
                 CompletableFuture.delayedExecutor(1000, TimeUnit.MILLISECONDS)
