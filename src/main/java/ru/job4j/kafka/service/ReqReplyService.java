@@ -18,8 +18,7 @@ public class ReqReplyService {
 
     public String send(final String correlationId, String payload) {
         final String response;
-        ReqReply reqReply = new ReqReply();
-        reqReply.setTimeout(this.timeout);
+        ReqReply reqReply = new ReqReply(this.timeout);
         callbackStorage.put(correlationId, new Pair<>(payload,reqReply));
         response = reqReply.send(payload);
         return response;
@@ -35,6 +34,10 @@ public class ReqReplyService {
 
 
     private static class ReqReply {
+
+        public ReqReply(long timeout) {
+            this.timeout = timeout;
+        }
 
         private long timeout;
         private String message = "";
@@ -62,10 +65,6 @@ public class ReqReplyService {
             message = receiverMessage;
             log.info("Notify  : "+receiverMessage);
             receiverMessage.notifyAll();
-        }
-
-        public void setTimeout(long timeout) {
-            this.timeout = timeout;
         }
     }
 }
